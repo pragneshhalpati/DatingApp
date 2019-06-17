@@ -6,17 +6,28 @@ import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
 import { FormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { ErrorIntercepterProvider } from './_services/error.intercepter';
 import { AuthService } from './_services/auth.service';
 import { AlertifyService } from './_services/alertify.service';
-import { MemberListComponent } from './member-list/member-list.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { UserService } from './_services/User.service';
+import { MemberCardComponent } from './members/member-card/member-card.component';
+import { JwtModule } from '@auth0/angular-jwt';
+import { MemberDetailComponent } from './members/MemberDetail/MemberDetail.component';
+import { TabsModule } from 'ngx-bootstrap';
+import { MemberDetailResolver } from './_resplver/Member-Detail.resolver';
+import { MemberListResolver } from './_resplver/Member-list.resolver';
 
+export function tokenGetter() {
+   return localStorage.getItem('token');
+ }
 
 @NgModule({
    declarations: [
@@ -26,20 +37,34 @@ import { AuthGuard } from './_guards/auth.guard';
       RegisterComponent,
       MemberListComponent,
       ListsComponent,
-      MessagesComponent
+      MessagesComponent,
+      MemberCardComponent,
+      MemberDetailComponent
    ],
    imports: [
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
       FormsModule,
-      BsDropdownModule.forRoot()
+      BsDropdownModule.forRoot(),
+      TabsModule.forRoot(),
+      NgxGalleryModule,
+      JwtModule.forRoot({
+         config: {
+           tokenGetter: tokenGetter,
+           whitelistedDomains: ['localhost:5000'],
+           blacklistedRoutes: ['localhost:5000/api/auth']
+         }
+       })
    ],
    providers: [
       AuthService,
       ErrorIntercepterProvider,
       AlertifyService,
-      AuthGuard
+      AuthGuard,
+      UserService,
+      MemberDetailResolver,
+      MemberListResolver
    ],
    bootstrap: [
       AppComponent

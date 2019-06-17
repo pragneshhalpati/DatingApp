@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { MemberListComponent } from './member-list/member-list.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
 import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { AuthGuard } from './_guards/auth.guard';
+import { MemberDetailComponent } from './members/MemberDetail/MemberDetail.component';
+import { MemberDetailResolver } from './_resplver/Member-Detail.resolver';
+import { MemberListResolver } from './_resplver/Member-list.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,9 +16,10 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'members', component: MemberListComponent},
-      { path: 'lists', component: ListsComponent},
-      { path: 'messages', component: MessagesComponent},
+      { path: 'members', component: MemberListComponent , resolve: {users: MemberListResolver }},
+      { path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver }},
+      { path: 'lists', component: ListsComponent },
+      { path: 'messages', component: MessagesComponent },
     ]
     // { path: 'messages', component: MessagesComponent, canActivate: [AuthGuard] },
   },
