@@ -20,7 +20,7 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => {
-      this.user = data['user'];
+      this.user = data.user;
     });
 
     this.galleryOptions = [
@@ -37,12 +37,20 @@ export class MemberDetailComponent implements OnInit {
   }
   getImages() {
     const imageUrls = [];
-    for (let i = 0; i < this.user.photos.length; i++) {
+    // this.user.photos.forEach(element => {
+    //   imageUrls.push({
+    //     small: element.url,
+    //     medium: element.url,
+    //     big: element.url,
+    //     description: element.description
+    //   });
+    //  });
+    for (const i of this.user.photos) {
       imageUrls.push({
-        small: this.user.photos[i].url,
-        medium: this.user.photos[i].url,
-        big: this.user.photos[i].url,
-        description: this.user.photos[i].description
+        small: i.url,
+        medium: i.url,
+        big: i.url,
+        description: i.description
       });
     }
     return imageUrls;
